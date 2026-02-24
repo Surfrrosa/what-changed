@@ -50,31 +50,35 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 async function init() {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  if (!tab?.url) {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab?.url) {
+      show('no-data');
+      return;
+    }
+
+    const title = document.getElementById('page-title');
+    if (title) title.textContent = tab.title || tab.url;
+
+    const diff: DiffResponse | null = await chrome.runtime.sendMessage({
+      type: 'get-diff',
+      url: tab.url,
+    });
+
+    if (!diff) {
+      show('no-data');
+      return;
+    }
+
+    if (diff.significance < 0.01) {
+      show('no-changes');
+      return;
+    }
+
+    renderDiff(diff);
+  } catch {
     show('no-data');
-    return;
   }
-
-  const title = document.getElementById('page-title');
-  if (title) title.textContent = tab.title || tab.url;
-
-  const diff: DiffResponse | null = await chrome.runtime.sendMessage({
-    type: 'get-diff',
-    url: tab.url,
-  });
-
-  if (!diff) {
-    show('no-data');
-    return;
-  }
-
-  if (diff.significance < 0.01) {
-    show('no-changes');
-    return;
-  }
-
-  renderDiff(diff);
 }
 
 // Re-init when the active tab changes

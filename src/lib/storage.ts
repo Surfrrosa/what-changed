@@ -93,7 +93,7 @@ export async function pruneOldSnapshots(
   const index = tx.store.index('by-date');
 
   let deleted = 0;
-  let cursor = await index.openCursor(IDBKeyRange.upperBound(cutoff));
+  let cursor = await index.openCursor(IDBKeyRange.upperBound(cutoff, true));
   while (cursor) {
     await cursor.delete();
     deleted++;

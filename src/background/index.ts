@@ -9,6 +9,7 @@ import {
 } from '../lib/storage';
 import { normalizeUrl, isTrackablePage, isBlockedDomain } from '../lib/url';
 import { computeDiff, isDynamicFeed, buildDiffResponse } from '../lib/diff';
+import { normalizeText } from '../lib/noise';
 import { getSettings } from '../lib/settings';
 import type { Snapshot, DiffResponse, StatusResponse } from '../lib/types';
 
@@ -20,10 +21,14 @@ chrome.alarms.create('prune-snapshots', { periodInMinutes: 60 * 24 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === 'prune-snapshots') {
-    const settings = await getSettings();
-    const maxAge = settings.retentionDays * 24 * 60 * 60 * 1000;
-    const n = await pruneOldSnapshots(maxAge);
-    if (n > 0) console.log(`[What Changed] Pruned ${n} old snapshots`);
+    try {
+      const settings = await getSettings();
+      const maxAge = settings.retentionDays * 24 * 60 * 60 * 1000;
+      const n = await pruneOldSnapshots(maxAge);
+      if (n > 0) console.log(`[What Changed] Pruned ${n} old snapshots`);
+    } catch (e) {
+      console.error('[What Changed] Prune failed:', e);
+    }
   }
 });
 
@@ -62,7 +67,8 @@ async function handleSnapshot(
     return { stored: false, hasChanges: false };
   }
 
-  const contentHash = await hashContent(msg.data.text);
+  const normalized = normalizeText(msg.data.text);
+  const contentHash = await hashContent(normalized);
 
   const snapshot: Omit<Snapshot, 'id'> = {
     url,
@@ -97,7 +103,7 @@ async function handleSnapshot(
   }
 
   const count = diff.changes.filter(c => c.added || c.removed).length;
-  chrome.action.setBadgeText({ tabId, text: String(count) });
+  chrome.action.setBadgeText({ tabId, text: count > 99 ? '99+' : String(count) });
   chrome.action.setBadgeBackgroundColor({ tabId, color: BADGE_COLOR });
 
   return result;

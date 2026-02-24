@@ -20,46 +20,50 @@ function show(id: string) {
 }
 
 async function init() {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-  if (!tab?.url || !tab.url.startsWith('http')) {
-    show('not-trackable');
-    return;
-  }
+    if (!tab?.url || !tab.url.startsWith('http')) {
+      show('not-trackable');
+      return;
+    }
 
-  const status: StatusResponse = await chrome.runtime.sendMessage({
-    type: 'get-status',
-    url: tab.url,
-  });
+    const status: StatusResponse = await chrome.runtime.sendMessage({
+      type: 'get-status',
+      url: tab.url,
+    });
 
-  if (!status || status.snapshotCount <= 1) {
+    if (!status || status.snapshotCount <= 1) {
+      show('first-visit');
+    } else if (status.hasChanges) {
+      show('has-changes');
+      const summary = document.querySelector('.change-summary');
+      if (summary) {
+        const n = status.changeCount;
+        summary.textContent = `${n} change${n !== 1 ? 's' : ''} detected`;
+      }
+      const info = document.querySelector('#has-changes .visit-info');
+      if (info && status.lastVisit) {
+        info.textContent = `Previous visit: ${timeAgo(status.lastVisit)}`;
+      }
+    } else {
+      show('no-changes');
+      const info = document.querySelector('#no-changes .visit-info');
+      if (info && status.lastVisit) {
+        info.textContent = `Last visited: ${timeAgo(status.lastVisit)}`;
+      }
+    }
+
+    // Stats footer
+    const stats: StatsResponse = await chrome.runtime.sendMessage({
+      type: 'get-stats',
+    });
+    const el = document.getElementById('stats');
+    if (el && stats) {
+      el.textContent = `Tracking ${stats.uniqueUrls} page${stats.uniqueUrls !== 1 ? 's' : ''}`;
+    }
+  } catch {
     show('first-visit');
-  } else if (status.hasChanges) {
-    show('has-changes');
-    const summary = document.querySelector('.change-summary');
-    if (summary) {
-      const n = status.changeCount;
-      summary.textContent = `${n} change${n !== 1 ? 's' : ''} detected`;
-    }
-    const info = document.querySelector('#has-changes .visit-info');
-    if (info && status.lastVisit) {
-      info.textContent = `Previous visit: ${timeAgo(status.lastVisit)}`;
-    }
-  } else {
-    show('no-changes');
-    const info = document.querySelector('#no-changes .visit-info');
-    if (info && status.lastVisit) {
-      info.textContent = `Last visited: ${timeAgo(status.lastVisit)}`;
-    }
-  }
-
-  // Stats footer
-  const stats: StatsResponse = await chrome.runtime.sendMessage({
-    type: 'get-stats',
-  });
-  const el = document.getElementById('stats');
-  if (el && stats) {
-    el.textContent = `Tracking ${stats.uniqueUrls} page${stats.uniqueUrls !== 1 ? 's' : ''}`;
   }
 }
 

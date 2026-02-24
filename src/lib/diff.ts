@@ -26,7 +26,7 @@ function computeSignificance(
     .filter(c => c.added || c.removed)
     .reduce((sum, c) => sum + c.value.length, 0);
 
-  return changed / total;
+  return Math.min(changed / total, 1);
 }
 
 export function isDynamicFeed(url: string, significance: number): boolean {

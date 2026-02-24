@@ -7,11 +7,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const outDir = join(__dirname, '..', 'static', 'icons');
 mkdirSync(outDir, { recursive: true });
 
-// Dark rounded square with a white delta (change) symbol
+// Dark rounded square with a bold white W
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
   <rect width="128" height="128" rx="28" fill="#1a1a1a"/>
-  <path d="M64 30 L98 98 H30 Z" fill="none" stroke="white" stroke-width="10" stroke-linejoin="round"/>
-  <circle cx="64" cy="74" r="5" fill="#4A90D9"/>
+  <text x="64" y="98" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="82" fill="white">W</text>
 </svg>`;
 
 for (const size of [16, 32, 48, 128]) {
