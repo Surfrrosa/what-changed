@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <h1>What Changed</h1>
+      <p id="page-title" class="muted"></p>
+    </div>
+
+    <div id="loading" class="state">
+      <p class="muted">Analyzing changes...</p>
+    </div>
+
+    <div id="diff-view" class="state" hidden>
+      <div class="meta">
+        <div class="meta-row">
+          <span class="label">Previous visit</span>
+          <span id="old-date" class="value"></span>
+        </div>
+        <div class="meta-row">
+          <span class="label">Current visit</span>
+          <span id="new-date" class="value"></span>
+        </div>
+        <div class="meta-row">
+          <span class="label">Significance</span>
+          <span id="significance" class="value"></span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="added">Added</button>
+        <button class="filter-btn" data-filter="removed">Removed</button>
+      </div>
+
+      <div id="diff-content" class="diff-content" data-filter="all"></div>
+    </div>
+
+    <div id="no-changes" class="state" hidden>
+      <p>No changes detected on this page.</p>
+    </div>
+
+    <div id="no-data" class="state" hidden>
+      <p>No previous visits recorded for this page.</p>
+      <p class="muted">Changes will appear after your next visit.</p>
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

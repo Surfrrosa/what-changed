@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <h1>What Changed</h1>
+    </div>
+
+    <div id="loading" class="state">
+      <p class="muted">Checking...</p>
+    </div>
+
+    <div id="has-changes" class="state" hidden>
+      <p class="change-summary"></p>
+      <p class="visit-info muted"></p>
+      <button id="view-changes">View changes</button>
+    </div>
+
+    <div id="no-changes" class="state" hidden>
+      <p>No changes since your last visit.</p>
+      <p class="visit-info muted"></p>
+    </div>
+
+    <div id="first-visit" class="state" hidden>
+      <p>First visit recorded.</p>
+      <p class="muted">Changes will appear next time this page updates.</p>
+    </div>
+
+    <div id="not-trackable" class="state" hidden>
+      <p class="muted">This page can't be tracked.</p>
+    </div>
+
+    <div class="footer">
+      <span id="stats" class="muted"></span>
+    </div>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — What Changed</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="/" class="logo">What Changed</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="https://github.com/Surfrrosa/what-changed" class="gh-link">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="prose">
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last updated: February 2026</p>
+
+        <h2>Summary</h2>
+        <p>What Changed stores all data locally in your browser. No data is ever transmitted to any external server. We do not collect, store, or have access to any of your browsing data.</p>
+
+        <h2>What data is stored</h2>
+        <p>When you visit a webpage, the extension extracts the main text content and stores it in your browser's local IndexedDB database. Stored data includes:</p>
+        <ul>
+          <li>The URL of the page</li>
+          <li>The page title</li>
+          <li>Extracted text content (via Mozilla's Readability algorithm)</li>
+          <li>A timestamp of when the page was visited</li>
+          <li>A SHA-256 hash of the content (for deduplication)</li>
+        </ul>
+
+        <h2>Where data is stored</h2>
+        <p>All data is stored exclusively in your browser's local IndexedDB. No data is transmitted to any external server, API, or third-party service. The extension makes no network requests and has no server component.</p>
+
+        <h2>How data is used</h2>
+        <p>Stored snapshots are used solely to compute text differences when you revisit a page. All comparisons are performed entirely within your browser.</p>
+
+        <h2>Data retention</h2>
+        <p>By default, snapshots older than 90 days are automatically deleted. You can adjust this period in the extension's settings. You can also clear all stored data at any time.</p>
+
+        <h2>Data sharing</h2>
+        <p>Your data is never shared with anyone. The extension has no analytics, no telemetry, and no third-party integrations.</p>
+
+        <h2>Permissions explained</h2>
+        <ul>
+          <li><strong>Access to all websites:</strong> Required to capture page content automatically on every site you visit, without requiring a click each time.</li>
+          <li><strong>Storage / Unlimited storage:</strong> Required to store page snapshots locally. Accumulated content can exceed default quotas over time.</li>
+          <li><strong>Tabs:</strong> Required to detect page navigation and update the extension badge.</li>
+          <li><strong>Side panel:</strong> Required to display the diff viewer alongside the page.</li>
+        </ul>
+
+        <h2>Your rights</h2>
+        <p>You can:</p>
+        <ul>
+          <li>View storage statistics in the extension's settings</li>
+          <li>Delete all stored data at any time</li>
+          <li>Block specific domains from being tracked</li>
+          <li>Adjust the data retention period</li>
+          <li>Uninstall the extension to remove all data</li>
+        </ul>
+
+        <h2>Changes to this policy</h2>
+        <p>Any changes will be posted on this page with an updated date.</p>
+
+        <h2>Contact</h2>
+        <p>For privacy questions, please <a href="https://github.com/Surfrrosa/what-changed">open an issue on GitHub</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>What Changed is free and open source.</p>
+      <div class="footer-links">
+        <a href="https://github.com/Surfrrosa/what-changed">GitHub</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

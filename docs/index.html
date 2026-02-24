@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Changed — See what changed on any page since your last visit</title>
+  <meta name="description" content="A Chrome extension that automatically tracks webpage changes and shows you a clean diff when you return. Zero setup. Completely private.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="/" class="logo">What Changed</a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://github.com/Surfrrosa/what-changed" class="gh-link">GitHub</a>
+        <a href="#" class="btn btn-sm">Add to Chrome</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <h1>See what changed<br>since your last visit</h1>
+      <p class="hero-sub">A Chrome extension that automatically tracks webpage changes and shows you a clean diff when you return. Zero setup. Completely private.</p>
+      <a href="#" class="btn btn-lg">Add to Chrome &mdash; It's Free</a>
+    </section>
+
+    <section class="demo">
+      <div class="demo-window">
+        <div class="demo-bar">
+          <span class="demo-dot"></span>
+          <span class="demo-dot"></span>
+          <span class="demo-dot"></span>
+        </div>
+        <div class="demo-content">
+          <p class="demo-line">The annual subscription costs <del class="wc-del">$49/year</del><ins class="wc-ins">$79/year</ins> and includes access to all features.</p>
+          <p class="demo-line dim">Members receive priority support and early access to new tools.</p>
+          <p class="demo-line">Your data is stored <del class="wc-del">on our secure servers in the US</del><ins class="wc-ins">with our third-party cloud partners globally</ins>.</p>
+          <p class="demo-line dim">Cancel anytime from your account settings.</p>
+          <p class="demo-line"><ins class="wc-ins">A 30-day notice period applies to all cancellations.</ins></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="section">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Install</h3>
+          <p>One click from the Chrome Web Store. No account, no configuration.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Browse</h3>
+          <p>The extension silently snapshots pages you visit. You do nothing.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Return</h3>
+          <p>Revisit any page and see exactly what changed, highlighted in context.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <h2>Features</h2>
+      <div class="features-grid">
+        <div class="feature">
+          <h3>Zero config</h3>
+          <p>Works on every page automatically. No watchlists, no polling intervals, no setup wizards.</p>
+        </div>
+        <div class="feature">
+          <h3>Smart extraction</h3>
+          <p>Uses Mozilla's Readability engine to focus on real content. Ignores ads, navigation, and timestamps.</p>
+        </div>
+        <div class="feature">
+          <h3>Private by design</h3>
+          <p>All data stays in your browser's local storage. No servers, no accounts, no analytics. Nothing leaves your machine.</p>
+        </div>
+        <div class="feature">
+          <h3>Meaningful diffs</h3>
+          <p>Word-level change detection that filters trivial updates. Surfaces only changes worth knowing about.</p>
+        </div>
+        <div class="feature">
+          <h3>SPA support</h3>
+          <p>Works on modern single-page applications. Detects client-side navigation and re-captures automatically.</p>
+        </div>
+        <div class="feature">
+          <h3>Lightweight</h3>
+          <p>150 KB total. No performance impact on your browsing. Smart deduplication keeps storage minimal.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <h2>Built for curiosity</h2>
+      <div class="use-cases">
+        <div class="use-case">
+          <h3>Track policy changes</h3>
+          <p>Companies quietly edit their terms, privacy policies, and pricing pages. Now you'll notice.</p>
+        </div>
+        <div class="use-case">
+          <h3>Follow evolving stories</h3>
+          <p>News articles get edited after publication. Headlines shift, details change. See the evolution.</p>
+        </div>
+        <div class="use-case">
+          <h3>Monitor competitors</h3>
+          <p>Product pages, feature lists, and job postings change. Stay informed without setting up alerts.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy" class="section">
+      <h2>Privacy</h2>
+      <p class="centered-text">What Changed stores all data locally in your browser's IndexedDB. No data is ever transmitted to any server. No accounts, no analytics, no tracking. Your browsing data stays yours.</p>
+      <p class="centered-text" style="margin-top: 12px;"><a href="privacy.html">Read the full privacy policy</a></p>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>What Changed is free and open source.</p>
+      <div class="footer-links">
+        <a href="https://github.com/Surfrrosa/what-changed">GitHub</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
