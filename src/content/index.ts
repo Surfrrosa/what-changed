@@ -55,6 +55,7 @@ async function capture() {
   const result = captureContent(document);
   if (result.text.length < 100) return;
 
+  if (!chrome.runtime?.id) return; // extension context invalidated
   chrome.runtime.sendMessage({
     type: 'snapshot',
     data: {

@@ -23,7 +23,7 @@ const diffCache = new Map<string, DiffResponse>();
 
 chrome.tabs.onUpdated.addListener((tabId, info) => {
   if (info.status === 'loading') {
-    chrome.action.setBadgeText({ tabId, text: '' });
+    chrome.action.setBadgeText({ tabId, text: '' }).catch(() => {});
   }
 });
 
@@ -104,7 +104,7 @@ async function handleSnapshot(
   if (tabId == null) return result;
 
   if (!result.hasChanges) {
-    chrome.action.setBadgeText({ tabId, text: '' });
+    chrome.action.setBadgeText({ tabId, text: '' }).catch(() => {});
     return result;
   }
 
@@ -116,7 +116,7 @@ async function handleSnapshot(
   const minSig = settings.minSignificance / 100;
 
   if (isDynamicFeed(url, diff.significance) || diff.significance < minSig) {
-    chrome.action.setBadgeText({ tabId, text: '' });
+    chrome.action.setBadgeText({ tabId, text: '' }).catch(() => {});
     return { ...result, hasChanges: false };
   }
 
@@ -124,8 +124,8 @@ async function handleSnapshot(
   diffCache.set(url, buildDiffResponse(diff, minSig, url));
 
   const count = diff.changes.filter(c => c.added || c.removed).length;
-  chrome.action.setBadgeText({ tabId, text: count > 99 ? '99+' : String(count) });
-  chrome.action.setBadgeBackgroundColor({ tabId, color: BADGE_COLOR });
+  chrome.action.setBadgeText({ tabId, text: count > 99 ? '99+' : String(count) }).catch(() => {});
+  chrome.action.setBadgeBackgroundColor({ tabId, color: BADGE_COLOR }).catch(() => {});
 
   return result;
 }
