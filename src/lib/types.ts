@@ -36,6 +36,7 @@ export interface DiffResponse {
   changes: Change[];
   changeCount: number;
   minSignificance: number;
+  isDynamic: boolean;
 }
 
 export interface StatusResponse {

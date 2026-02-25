@@ -100,6 +100,11 @@ async function init() {
       return;
     }
 
+    if (diff.isDynamic) {
+      show('dynamic-feed');
+      return;
+    }
+
     renderDiff(diff);
   } catch {
     show('no-data');

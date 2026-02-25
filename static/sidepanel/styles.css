@@ -146,13 +146,29 @@ h1 {
   color: #1a1a1a;
 }
 
-/* Filter states — use opacity to preserve context (U1) */
+/* Filter states — faded context instead of hiding (U1) */
 
 .diff-content[data-filter="added"] .wc-removed {
-  opacity: 0.15;
+  opacity: 0.2;
   text-decoration: none;
+  color: #999;
+  background: none;
+}
+
+.diff-content[data-filter="added"] .wc-unchanged {
+  opacity: 0.4;
 }
 
 .diff-content[data-filter="removed"] .wc-added {
-  opacity: 0.15;
+  opacity: 0.2;
+  color: #999;
+  background: none;
+}
+
+.diff-content[data-filter="removed"] .wc-removed {
+  text-decoration: none;
+}
+
+.diff-content[data-filter="removed"] .wc-unchanged {
+  opacity: 0.4;
 }

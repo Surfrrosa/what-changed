@@ -121,7 +121,7 @@ async function handleSnapshot(
   }
 
   // Cache the result
-  diffCache.set(url, buildDiffResponse(diff, minSig));
+  diffCache.set(url, buildDiffResponse(diff, minSig, url));
 
   const count = diff.changes.filter(c => c.added || c.removed).length;
   chrome.action.setBadgeText({ tabId, text: count > 99 ? '99+' : String(count) });
@@ -143,7 +143,7 @@ async function handleGetDiff(rawUrl: string): Promise<DiffResponse | null> {
   const diff = computeDiff(pair[0], pair[1]);
   const settings = await getSettings();
   const minSig = settings.minSignificance / 100;
-  const response = buildDiffResponse(diff, minSig);
+  const response = buildDiffResponse(diff, minSig, url);
 
   diffCache.set(url, response);
   return response;

@@ -48,7 +48,8 @@ export function isDynamicFeed(url: string, significance: number): boolean {
 
 export function buildDiffResponse(
   diff: DiffResult,
-  minSignificance: number
+  minSignificance: number,
+  url: string
 ): DiffResponse {
   return {
     oldTimestamp: diff.oldSnapshot.timestamp,
@@ -58,5 +59,6 @@ export function buildDiffResponse(
     changes: diff.changes,
     changeCount: diff.changes.filter(c => c.added || c.removed).length,
     minSignificance,
+    isDynamic: isDynamicFeed(url, diff.significance),
   };
 }
