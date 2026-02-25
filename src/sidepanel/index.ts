@@ -1,4 +1,4 @@
-import type { DiffResponse } from '../lib/types';
+import type { DiffResponse, Change } from '../lib/types';
 
 function formatDate(ts: number): string {
   return new Date(ts).toLocaleString(undefined, {
@@ -18,6 +18,27 @@ function show(id: string) {
   if (el) el.hidden = false;
 }
 
+/** Build DOM nodes from the changes array — no innerHTML. */
+function buildDiffNodes(changes: Change[]): DocumentFragment {
+  const frag = document.createDocumentFragment();
+  for (const c of changes) {
+    let el: HTMLElement;
+    if (c.removed) {
+      el = document.createElement('del');
+      el.className = 'wc-removed';
+    } else if (c.added) {
+      el = document.createElement('ins');
+      el.className = 'wc-added';
+    } else {
+      el = document.createElement('span');
+      el.className = 'wc-unchanged';
+    }
+    el.textContent = c.value;
+    frag.appendChild(el);
+  }
+  return frag;
+}
+
 function renderDiff(diff: DiffResponse) {
   show('diff-view');
 
@@ -34,7 +55,10 @@ function renderDiff(diff: DiffResponse) {
   if (sig) sig.textContent = `${Math.round(diff.significance * 100)}% changed`;
 
   const content = document.getElementById('diff-content');
-  if (content) content.innerHTML = diff.changesHtml;
+  if (content) {
+    content.textContent = '';
+    content.appendChild(buildDiffNodes(diff.changes));
+  }
 }
 
 // Filter buttons
@@ -70,7 +94,8 @@ async function init() {
       return;
     }
 
-    if (diff.significance < 0.01) {
+    // Use the same threshold as popup/badge (B2 fix)
+    if (diff.significance < diff.minSignificance) {
       show('no-changes');
       return;
     }

@@ -3,14 +3,19 @@
   "name": "What Changed",
   "description": "See what changed on any page since your last visit",
   "version": "0.1.0",
+  "version_name": "0.1.0 Beta",
   "permissions": [
     "storage",
-    "unlimitedStorage",
     "tabs",
-    "activeTab",
     "alarms",
     "sidePanel"
   ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'"
+  },
   "background": {
     "service_worker": "background.js"
   },

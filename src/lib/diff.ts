@@ -46,28 +46,17 @@ export function isDynamicFeed(url: string, significance: number): boolean {
   return false;
 }
 
-export function changesToHtml(changes: Change[]): string {
-  return changes
-    .map(c => {
-      const escaped = c.value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-
-      if (c.removed) return `<del class="wc-removed">${escaped}</del>`;
-      if (c.added) return `<ins class="wc-added">${escaped}</ins>`;
-      return `<span class="wc-unchanged">${escaped}</span>`;
-    })
-    .join('');
-}
-
-export function buildDiffResponse(diff: DiffResult): DiffResponse {
+export function buildDiffResponse(
+  diff: DiffResult,
+  minSignificance: number
+): DiffResponse {
   return {
     oldTimestamp: diff.oldSnapshot.timestamp,
     newTimestamp: diff.newSnapshot.timestamp,
     title: diff.newSnapshot.title,
     significance: diff.significance,
-    changesHtml: changesToHtml(diff.changes),
+    changes: diff.changes,
     changeCount: diff.changes.filter(c => c.added || c.removed).length,
+    minSignificance,
   };
 }

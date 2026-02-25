@@ -146,12 +146,13 @@ h1 {
   color: #1a1a1a;
 }
 
-/* Filter states */
+/* Filter states — use opacity to preserve context (U1) */
 
 .diff-content[data-filter="added"] .wc-removed {
-  display: none;
+  opacity: 0.15;
+  text-decoration: none;
 }
 
 .diff-content[data-filter="removed"] .wc-added {
-  display: none;
+  opacity: 0.15;
 }

@@ -11,9 +11,21 @@ import { normalizeUrl, isTrackablePage, isBlockedDomain } from '../lib/url';
 import { computeDiff, isDynamicFeed, buildDiffResponse } from '../lib/diff';
 import { normalizeText } from '../lib/noise';
 import { getSettings } from '../lib/settings';
-import type { Snapshot, DiffResponse, StatusResponse } from '../lib/types';
+import type { Snapshot, DiffResponse, DiffResult, StatusResponse } from '../lib/types';
 
 const BADGE_COLOR = '#4A90D9';
+
+// --- Diff cache (A1) ---
+
+const diffCache = new Map<string, DiffResponse>();
+
+// --- Clear badge on navigation (U5) ---
+
+chrome.tabs.onUpdated.addListener((tabId, info) => {
+  if (info.status === 'loading') {
+    chrome.action.setBadgeText({ tabId, text: '' });
+  }
+});
 
 // --- Daily cleanup ---
 
@@ -37,7 +49,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const handler = messageHandlers[message.type as string];
   if (handler) {
-    handler(message, sender).then(sendResponse);
+    handler(message, sender).then(sendResponse).catch(() => sendResponse(null));
     return true; // async
   }
 });
@@ -50,7 +62,10 @@ const messageHandlers: Record<
   'get-diff': (msg) => handleGetDiff(msg.url),
   'get-status': (msg) => handleGetStatus(msg.url),
   'get-stats': () => getStats(),
-  'clear-all': () => clearAllData(),
+  'clear-all': async () => {
+    await clearAllData();
+    diffCache.clear();
+  },
 };
 
 async function handleSnapshot(
@@ -83,6 +98,9 @@ async function handleSnapshot(
   const result = await storeSnapshot(snapshot);
   const tabId = sender.tab?.id;
 
+  // Invalidate cache for this URL
+  diffCache.delete(url);
+
   if (tabId == null) return result;
 
   if (!result.hasChanges) {
@@ -95,12 +113,15 @@ async function handleSnapshot(
   if (!pair) return result;
 
   const diff = computeDiff(pair[0], pair[1]);
-
   const minSig = settings.minSignificance / 100;
+
   if (isDynamicFeed(url, diff.significance) || diff.significance < minSig) {
     chrome.action.setBadgeText({ tabId, text: '' });
     return { ...result, hasChanges: false };
   }
+
+  // Cache the result
+  diffCache.set(url, buildDiffResponse(diff, minSig));
 
   const count = diff.changes.filter(c => c.added || c.removed).length;
   chrome.action.setBadgeText({ tabId, text: count > 99 ? '99+' : String(count) });
@@ -111,11 +132,21 @@ async function handleSnapshot(
 
 async function handleGetDiff(rawUrl: string): Promise<DiffResponse | null> {
   const url = normalizeUrl(rawUrl);
+
+  // Check cache first (A1)
+  const cached = diffCache.get(url);
+  if (cached) return cached;
+
   const pair = await getLatestTwo(url);
   if (!pair) return null;
 
   const diff = computeDiff(pair[0], pair[1]);
-  return buildDiffResponse(diff);
+  const settings = await getSettings();
+  const minSig = settings.minSignificance / 100;
+  const response = buildDiffResponse(diff, minSig);
+
+  diffCache.set(url, response);
+  return response;
 }
 
 async function handleGetStatus(rawUrl: string): Promise<StatusResponse> {

@@ -6,7 +6,7 @@ export interface Settings {
 
 const DEFAULTS: Settings = {
   retentionDays: 90,
-  minSignificance: 2,
+  minSignificance: 5,
   blockedDomains: [],
 };
 

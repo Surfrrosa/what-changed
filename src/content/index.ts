@@ -3,43 +3,48 @@ import { captureContent } from '../lib/capture';
 // Wait for the DOM to stop mutating (SPAs, async content)
 function waitForStableDOM(timeout = 5000): Promise<void> {
   return new Promise((resolve) => {
-    let timer: ReturnType<typeof setTimeout>;
+    // Wait for document to be fully loaded first (B4)
+    if (document.readyState !== 'complete') {
+      window.addEventListener('load', () => startObserving(resolve, timeout), { once: true });
+    } else {
+      startObserving(resolve, timeout);
+    }
+  });
+}
 
-    const observer = new MutationObserver(() => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        observer.disconnect();
-        resolve();
-      }, 1500);
-    });
+function startObserving(resolve: () => void, timeout: number): void {
+  let timer: ReturnType<typeof setTimeout>;
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
-
-    // Hard timeout
-    setTimeout(() => {
-      observer.disconnect();
-      resolve();
-    }, timeout);
-
-    // Resolve if no mutations happen quickly
+  const observer = new MutationObserver(() => {
+    clearTimeout(timer);
     timer = setTimeout(() => {
       observer.disconnect();
       resolve();
     }, 1500);
   });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    characterData: true,
+  });
+
+  // Hard timeout
+  setTimeout(() => {
+    observer.disconnect();
+    resolve();
+  }, timeout);
+
+  // Resolve if no mutations happen quickly
+  timer = setTimeout(() => {
+    observer.disconnect();
+    resolve();
+  }, 1500);
 }
 
 function isLoginPage(): boolean {
-  if (document.querySelectorAll('input[type="password"]').length === 0) {
-    return false;
-  }
-  const text = document.body.innerText.toLowerCase();
-  const keywords = ['sign in', 'log in', 'login', 'sign up', 'create account'];
-  return keywords.some(kw => text.includes(kw));
+  // Check for password fields only — conservative approach (S5)
+  return document.querySelectorAll('input[type="password"]').length > 0;
 }
 
 async function capture() {
@@ -61,15 +66,31 @@ async function capture() {
   });
 }
 
-// Detect SPA navigations
+// Detect SPA navigations via History API (B3)
 let lastUrl = location.href;
-const spaObserver = new MutationObserver(() => {
+
+function onNavigation() {
   if (location.href !== lastUrl) {
     lastUrl = location.href;
     setTimeout(capture, 500);
   }
-});
-spaObserver.observe(document.body, { childList: true, subtree: true });
+}
+
+// Monkey-patch pushState/replaceState
+const origPushState = history.pushState.bind(history);
+const origReplaceState = history.replaceState.bind(history);
+
+history.pushState = function (...args) {
+  origPushState(...args);
+  onNavigation();
+};
+
+history.replaceState = function (...args) {
+  origReplaceState(...args);
+  onNavigation();
+};
+
+window.addEventListener('popstate', onNavigation);
 
 // Initial capture
 capture();

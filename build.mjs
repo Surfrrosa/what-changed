@@ -1,6 +1,8 @@
 import { build } from 'esbuild';
 import { cpSync, rmSync } from 'fs';
 
+const isDev = process.argv.includes('--dev');
+
 // Clean previous build
 rmSync('dist', { recursive: true, force: true });
 
@@ -17,10 +19,10 @@ await build({
   outdir: 'dist',
   format: 'iife',
   target: 'chrome120',
-  sourcemap: true,
+  sourcemap: isDev,
 });
 
 // Copy static assets (manifest, HTML, CSS)
 cpSync('static', 'dist', { recursive: true });
 
-console.log('Build complete -> dist/');
+console.log(`Build complete -> dist/${isDev ? ' (with source maps)' : ''}`);

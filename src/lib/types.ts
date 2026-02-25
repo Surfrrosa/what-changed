@@ -33,8 +33,9 @@ export interface DiffResponse {
   newTimestamp: number;
   title: string;
   significance: number;
-  changesHtml: string;
+  changes: Change[];
   changeCount: number;
+  minSignificance: number;
 }
 
 export interface StatusResponse {

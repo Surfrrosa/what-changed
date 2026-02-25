@@ -63,7 +63,7 @@ async function init() {
       el.textContent = `Tracking ${stats.uniqueUrls} page${stats.uniqueUrls !== 1 ? 's' : ''}`;
     }
   } catch {
-    show('first-visit');
+    show('error');
   }
 }
 
