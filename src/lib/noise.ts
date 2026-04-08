@@ -11,7 +11,7 @@ const NOISE_SELECTORS = [
   '[class*="recommend"]', '[class*="sidebar"]',
   '[class*="related"]', '[class*="trending"]',
   '[class*="popular"]', '[class*="sponsored"]',
-  // Timestamps and counters
+  // Timestamps and counters (stripping <time> prevents spurious diffs from publish-date metadata)
   'time', '[class*="timestamp"]',
   '[class*="comment-count"]', '[class*="share-count"]',
   '[class*="like-count"]', '[class*="view-count"]',

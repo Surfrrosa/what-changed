@@ -6,9 +6,6 @@ declare module 'diff' {
     count?: number;
   }
   export function diffWords(oldStr: string, newStr: string): Change[];
-  export function diffLines(oldStr: string, newStr: string): Change[];
-  export function diffChars(oldStr: string, newStr: string): Change[];
-  export function diffSentences(oldStr: string, newStr: string): Change[];
 }
 
 declare module '@mozilla/readability' {

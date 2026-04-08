@@ -152,6 +152,18 @@ async function handleGetDiff(rawUrl: string): Promise<DiffResponse | null> {
 async function handleGetStatus(rawUrl: string): Promise<StatusResponse> {
   const url = normalizeUrl(rawUrl);
   const count = await getSnapshotCount(url);
+
+  // Use cached diff if available (avoids recomputing on every popup open)
+  const cached = diffCache.get(url);
+  if (cached) {
+    return {
+      snapshotCount: count,
+      lastVisit: cached.newTimestamp,
+      hasChanges: cached.changeCount > 0,
+      changeCount: cached.changeCount,
+    };
+  }
+
   const pair = await getLatestTwo(url);
 
   let changeCount = 0;

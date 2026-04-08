@@ -50,7 +50,7 @@ Side Panel / Popup
 | Language | TypeScript |
 | Extension platform | Chrome Manifest V3 |
 
-**Bundle sizes:** content script 88 KB (mostly Readability), background 40 KB, popup + sidepanel + options ~7 KB combined.
+**Bundle sizes:** content script ~92 KB (mostly Readability), background ~36 KB, popup + sidepanel + options ~9 KB combined.
 
 ## Development
 
