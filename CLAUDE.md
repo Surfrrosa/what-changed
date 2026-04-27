@@ -53,6 +53,29 @@ Load `dist/` as unpacked extension in `chrome://extensions` (Developer mode).
 - `build.mjs` — esbuild bundler config
 - `scripts/generate-icons.mjs` — SVG to PNG icon generation
 
+## Before Writing New Code
+
+Before adding a helper, type, or entry point, search for existing ones
+first:
+
+- `rg "<symbol>" src/` for similar names or near-duplicates
+- Shared modules in `src/lib/`:
+  - `storage.ts` — IndexedDB ops, dedup, pruning
+  - `capture.ts` — content extraction with Readability + fallbacks
+  - `diff.ts` — jsdiff word-level diffing + significance scoring
+  - `noise.ts` — DOM noise removal + text normalization
+  - `url.ts` — URL normalization, tracking-param stripping, blocklist
+  - `settings.ts` — `getSettings`, `saveSettings`, `Settings` type
+  - `types.ts` — central type definitions
+- The `show(id)` helper currently exists separately in popup and
+  sidepanel — if you need it in a third place, extract to `src/lib/dom.ts`
+- Side panel and popup receive pre-rendered HTML from background; don't
+  duplicate diffing/rendering logic in entry points
+
+Don't add a new file for a one-off variant of an existing pattern.
+If you're about to copy-paste a helper and tweak two values, extract
+a shared one instead.
+
 ## Key conventions
 
 - All entry points bundled as IIFE via esbuild (no ES module content scripts).
